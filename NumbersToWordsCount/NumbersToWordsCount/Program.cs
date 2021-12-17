@@ -42,103 +42,52 @@ namespace NumbersToWordsCount
         // Split the original number in its own parts: 932 = 900, 30, 2
         public static string SplitNumber(int num)
         {
+            if (num < 0)
+                return "";
+
             string numW = num.ToString();
             int numLength = numW.Length;
-            string feedback = "";
 
-            // Check how long the numeric value is
-            if (numLength == 1)
+            string returnFeed = "";
+
+            double[] array = new double[numLength];
+            for (int i = 0; i < numW.Length; i++)
             {
-                feedback += GetUnique(num);
+                Double.TryParse(numW[i].ToString(), out double proccesNum);
+                array[i] = proccesNum;
             }
-            else if (numLength == 2)
+            int lastTwo = 0;
+            if(numLength == 1)
+                lastTwo = Convert.ToInt32(((int)array[0]).ToString());
+            else 
+                lastTwo = Convert.ToInt32(array[array.Length - 2].ToString() + array[array.Length - 1].ToString());
+
+            if (CheckUnique(lastTwo) == true)
             {
-                if (num <= 20 && num > 0)
-                {
-                    GetUnique(num);
-                }
-                else if (num > 20)
-                {
-                    // Loop through the number given by the function param.
-                    double[] array = new double[numLength];
-                    for (int i = 0; i < numW.Length; i++)
-                    {
-                        Double.TryParse(numW[i].ToString(), out double proccesNum);
-                        array[i] = proccesNum;
-                    }
-                    Array.Reverse(array);
-                    for (int i = 0; i < array.Length; i++)
-                    {
-                        if (i > 0)
-                            array[i] *= Math.Pow(10, i);
-                    }
-
-                    // Return the values in plain text
-                    foreach (int j in array)
-                    {
-                        feedback += GetUnique(j);
-                    }
-                    // Enable this line of code to view what text is being generated
-                    //Console.WriteLine(feedback);
-                }
-
+                if(numLength >= 2)
+                    array[array.Length - 2] = 0;
+                array[array.Length - 1] = Convert.ToInt32(lastTwo);
             }
-            else if (numLength == 3)
+            // Reverse the array so the index is in a corresponding position with the math function to the power of.
+            // Array index 2 is in math to the power of 2 > num * (10 * the power of 2)
+            Array.Reverse(array);
+            for (int i = 0; i < array.Length; i++)
             {
-                if (num <= 20 && num > 0)
-                {
-                    GetUnique(num);
-                }
-                else if (num > 20)
-                {
-                    // Loop through the number given by the function param.
-                    double[] array = new double[numLength];
-                    for (int i = 0; i < numW.Length; i++)
-                    {
-                        Double.TryParse(numW[i].ToString(), out double proccesNum);
-                        array[i] = proccesNum;
-                    }
-
-                    // check if last 2 numbers together is a unique num
-                    string arr1 = array[array.Length - 1].ToString();
-                    string arr2 = array[array.Length - 2].ToString();
-                    string arr3 = arr2 + arr1;
-                    int checkUniqueLast = Convert.ToInt32(arr3);
-
-                    if (CheckUnique(checkUniqueLast) == true)
-                    {
-                        array[array.Length -2] = Convert.ToDouble(checkUniqueLast);
-                        array[array.Length -1] = 0;
-                    }
-                    else
-                    {
-
-                    }
-                    Array.Reverse(array);
-                    for (int i = 0; i < array.Length - 2; i++)
-                    {
-                        if (i > 0)
-                            array[i] *= Math.Pow(10, i);
-                    }
-
-                    // Return the values in plain text
-                    foreach (int j in array)
-                    {
-                        feedback += GetUnique(j);
-                    }
-                    // Enable this line of code to view what text is being generated
-                    Console.WriteLine(feedback);
-                }
+                if(i > 0)
+                    array[i] *= Math.Pow(10, i);
             }
-            else if (numLength == 4)
+
+            Array.Reverse(array);
+            // Return the values in plain text
+            foreach (int a in array)
             {
-
+                returnFeed += GetUnique(a);
             }
-            else if (numLength == 5)
-            {
 
-            }
-            return feedback;
+            // Enable this line of code to view what text is being generated
+            Console.WriteLine(returnFeed);
+
+            return returnFeed;
         }
 
         public static int GetCharCount(string s)
@@ -167,68 +116,61 @@ namespace NumbersToWordsCount
             {
                 switch (num)
                 {
-                    case 1:
-                        return "Een";
-                    case 2:
-                        return "Twee";
-                    case 3:
-                        return "Drie";
-                    case 4:
-                        return "Vier";
-                    case 5:
-                        return "Vijf";
-                    case 6:
-                        return "Zes";
-                    case 7:
-                        return "Zeven";
-                    case 8:
-                        return "Acht";
-                    case 9:
-                        return "Negen";
-                    case 10:
-                        return "Tien";
-                    case 11:
-                        return "Elf";
-                    case 12:
-                        return "Twaalf";
-                    case 13:
-                        return "Dertien";
-                    case 14:
-                        return "Viertien";
-                    case 15:
-                        return "Vijftien";
-                    case 16:
-                        return "Zestien";
-                    case 17:
-                        return "Zeventien";
-                    case 18:
-                        return "Achtien";
-                    case 19:
-                        return "Negentien";
-                    case 20:
-                        return "Twintig";
-                    case 30:
-                        return "Dertig";
-                    case 40:
-                        return "Veertig";
-                    case 50:
-                        return "Vijftig";
-                    case 60:
-                        return "Zestig";
-                    case 70:
-                        return "Zeventig";
-                    case 80:
-                        return "Tachtig";
-                    case 90:
-                        return "Negentig";
-                    case 100:
-                        return "Honderd";
-                    case 1000:
-                        return "Duizend";
-                    case 10000:
-                        return "Tienduizend";
-                    case 100000:
-                        return "HonderdDuizend";
+                    case 1: return "Een";
+                    case 2: return "Twee";
+                    case 3: return "Drie";
+                    case 4: return "Vier";
+                    case 5: return "Vijf";
+                    case 6: return "Zes";
+                    case 7: return "Zeven";
+                    case 8: return "Acht";
+                    case 9: return "Negen";
+                    case 10: return "Tien";
+                    case 11: return "Elf";
+                    case 12: return "Twaalf";
+                    case 13: return "Dertien";
+                    case 14: return "Viertien";
+                    case 15: return "Vijftien";
+                    case 16: return "Zestien";
+                    case 17: return "Zeventien";
+                    case 18: return "Achtien";
+                    case 19: return "Negentien";
+                    case 20: return "Twintig";
+                    case 30: return "Dertig";
+                    case 40: return "Veertig";
+                    case 50: return "Vijftig";
+                    case 60: return "Zestig";
+                    case 70: return "Zeventig";
+                    case 80: return "Tachtig";
+                    case 90: return "Negentig";
+                    case 100: return "Honderd";
+                    case 200: return "Tweehonderd";
+                    case 300: return "Driehonderd";
+                    case 400: return "Vierhonderd";
+                    case 500: return "Vijfhonderd";
+                    case 600: return "Zeshonderd";
+                    case 700: return "Zevenhonderd";
+                    case 800: return "Achthonderd";
+                    case 900: return "Negenhonderd";
+                    case 1000: return "Duizend";
+                    case 2000: return "Tweeduizend";
+                    case 3000: return "Drieduizend";
+                    case 4000: return "Vierduizend";
+                    case 5000: return "Vijfduizend";
+                    case 6000: return "Zesduizend";
+                    case 7000: return "Zevenduizend";
+                    case 8000: return "Achtduizend";
+                    case 9000: return "Negenduizend";
+                    case 10000: return "Tienduizend";
+                    case 20000: return "Twintigduizend";
+                    case 30000: return "Dertigduizend";
+                    case 40000: return "Veertigduizend";
+                    case 50000: return "Vijfitduizend";
+                    case 60000: return "Zestigduizend";
+                    case 70000: return "Zeventigduizend";
+                    case 80000: return "Tachtigduizend";
+                    case 90000: return "Negentigduizend";
+                    case 100000:return "HonderdDuizend";
                     case 1000000:
                         return "Miljoen";
                     default:
