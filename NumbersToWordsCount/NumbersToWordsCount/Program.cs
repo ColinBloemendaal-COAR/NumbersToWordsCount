@@ -12,21 +12,32 @@ namespace NumbersToWordsCount
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter the value of which you want to start from (> 0 && < 21): ");
-            string sta = Console.ReadLine();
-            Console.WriteLine("Enter the value of which you want the program to stop at (> 0 && < 21): ");
-            string end = Console.ReadLine();
-            Int32.TryParse(sta, out int st);
-            Int32.TryParse(end, out int en);
+            bool Application = true;
+            while (Application)
+            {
+                Console.WriteLine("Enter the value of which you want to start from (> 0 && < 21): ");
+                string sta = Console.ReadLine();
+                Console.WriteLine("Enter the value of which you want the program to stop at (> 0 && < 21): ");
+                string end = Console.ReadLine();
+                Int32.TryParse(sta, out int st);
+                Int32.TryParse(end, out int en);
 
-            int TotalCount = TotalCharCount(st, en);
-            Console.WriteLine("The total count of characters from the letter " + st + " to " + en + " is: " + TotalCount);
+                int TotalCount = TotalCharCount(st, en);
+                Console.WriteLine("The total count of characters from the letter " + st + " to " + en + " is: " + TotalCount);
 
-
-            // 132 = honderd en twee en dertig
-
-            Console.Write("Press <Enter> to exit... ");
-            while (Console.ReadKey().Key != ConsoleKey.Enter) { }
+                Console.Write("Press <Escape> to exit or press <Enter> to start over.");
+                var key = Console.ReadKey().Key;
+                if (key == ConsoleKey.Escape)
+                {
+                    Application = false;
+                    Environment.Exit(0);
+                }
+                if (key == ConsoleKey.Enter)
+                {
+                    Console.Clear();
+                    continue;
+                }
+            }
         }
 
         public static int TotalCharCount(int st, int en)
@@ -50,17 +61,23 @@ namespace NumbersToWordsCount
 
             string returnFeed = "";
 
+            // Set every digit of the number in its own array index
             double[] array = new double[numLength];
             for (int i = 0; i < numW.Length; i++)
             {
                 Double.TryParse(numW[i].ToString(), out double proccesNum);
                 array[i] = proccesNum;
             }
+
             int lastTwo = 0;
             if(numLength == 1)
                 lastTwo = Convert.ToInt32(((int)array[0]).ToString());
             else 
                 lastTwo = Convert.ToInt32(array[array.Length - 2].ToString() + array[array.Length - 1].ToString());
+
+            int TensOfThousands = 0;
+            if(numLength >= 5)
+                TensOfThousands = Convert.ToInt32(array[array.Length - 5].ToString() + array[array.Length - 4].ToString());
 
             if (CheckUnique(lastTwo) == true)
             {
